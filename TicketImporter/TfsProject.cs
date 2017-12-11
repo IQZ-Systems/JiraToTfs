@@ -258,6 +258,10 @@ namespace TicketImporter
                 {
                     workItem.Fields[fieldName].Value = field.ToFieldValue(value);
                 }
+                else
+                {
+                    LoggerUtil.WriteInLog("This field is not found ::::" + fieldName);
+                }
             }
         }
 
@@ -273,6 +277,7 @@ namespace TicketImporter
             var workItemTypes = workItemStore.Projects[project].WorkItemTypes;
 
             var workItemType = workItemTypes[toImport.TicketType];
+            LoggerUtil.WriteInLog("toImport.TicketType--->" + toImport.TicketType);
             var workItem = new WorkItem(workItemType);
 
             foreach (var fieldName in tfsFieldMap.Fields.EditableFields.
@@ -280,7 +285,10 @@ namespace TicketImporter
             {
                 assignToField(workItem, fieldName, fields[fieldName].DefaultValue);
             }
-
+            foreach(Field field in workItem.Fields)
+            {
+                LoggerUtil.WriteInLog(field.Name);
+            }
             workItem.Title = toImport.Summary;
             var description = toImport.Description;
 
@@ -299,6 +307,10 @@ namespace TicketImporter
             assignToField(workItem, "Team", assignedTeam);
             tfsUsers.AssignUser(toImport.AssignedTo, workItem);
 
+            LoggerUtil.WriteInLog("toImport.AssignedTo--->" + toImport.AssignedTo.DisplayName);
+
+
+            assignToField(workItem, "System.AssignedTo", toImport.AssignedTo);
             assignToField(workItem, "Story Points", toImport.StoryPoints);
             assignToField(workItem, "Effort", toImport.StoryPoints);
             workItem.AreaPath = (string.IsNullOrWhiteSpace(assignedAreaPath) ? project : assignedAreaPath);

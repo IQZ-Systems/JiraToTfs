@@ -52,6 +52,7 @@
     <Compile Include="AdvancedSettings.cs" />
     <Compile Include="ImportSummary.cs" />
     <Compile Include="Interface\IAvailableTicketTypes.cs" />
+    <Compile Include="LoggerUtil.cs" />
     <Compile Include="TechTalk.JiraRestClient\Attachment.cs" />
     <Compile Include="TechTalk.JiraRestClient\ChangeLog.cs" />
     <Compile Include="TechTalk.JiraRestClient\ChangeLogContainer.cs" />
