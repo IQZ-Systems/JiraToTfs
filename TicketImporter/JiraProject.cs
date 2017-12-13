@@ -29,6 +29,7 @@ using RestSharp.Extensions;
 using TechTalk.JiraRestClient;
 using TicketImporter.Interface;
 using TrackProgress;
+using System.Reflection;
 
 namespace TicketImporter
 {
@@ -207,19 +208,25 @@ namespace TicketImporter
                     try
                     {
                         var downloadTo = Path.Combine(downloadFolder, downloadedName);
-                        webClient.DownloadFile(new Uri(sourceUri), downloadTo);
+                                              
+                        using (WebClient wc = new WebClient())
+                        {
+                            wc.Headers.Add("User-Agent: Other");
+                            wc.DownloadFile(attachment.Source, downloadTo);
+                        }
                         attachment.Source = downloadTo;
                         attachment.FileName = downloadedName;
                         attachment.Downloaded = true;
                     }
-                    catch
+                    catch(Exception e)
                     {
+                        LoggerUtil.WriteInLog("Downloadpath Error-->" + e.Message);
                         attachment.Downloaded = false;
                     }
                 }
             }
         }
-
+        
         public List<string> GetAvailableTicketTypes()
         {
             var ticketTypes = new List<string>();

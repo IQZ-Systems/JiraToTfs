@@ -12,6 +12,9 @@ using System.Text;
 using RestSharp;
 using RestSharp.Deserializers;
 using TrackProgress;
+using TicketImporter;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json.Linq;
 
 namespace TechTalk.JiraRestClient
 {
@@ -76,7 +79,7 @@ namespace TechTalk.JiraRestClient
                 AssertStatus(response, HttpStatusCode.OK);
 
                 var issue = deserializer.Deserialize<Issue<TIssueFields>>(response);
-                issue.fields.comments = GetComments(issue).ToList();
+                issue.fields.comments = issue.renderedFields.comment.comments;
                 Issue.ExpandLinks(issue);
                 return issue;
             }

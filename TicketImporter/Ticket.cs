@@ -53,10 +53,11 @@ namespace TicketImporter
         {
             Author = author;
             Body = JiraString.StripNonPrintable(body);
+            Body = HtmlStringFormatter.FindHrefs(body);
             CreatedOn = createdOn;
             Updated = createdOn;
         }
-
+       
         public bool UpdatedLater
         {
             get { return (Updated > CreatedOn ? true : false); }
