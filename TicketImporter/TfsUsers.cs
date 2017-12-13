@@ -176,7 +176,6 @@ namespace TicketImporter
         public bool CanAddTicket(User toCheck)
         {
             var ableToAdd = true;
-            LoggerUtil.WriteInLog("unableToAddTickets.Contains(toCheck)" + unableToAddTickets.Contains(toCheck));
             if (unableToAddTickets.Contains(toCheck) == false)
             {
                 var impersonated_User = Impersonate(toCheck);
@@ -198,7 +197,6 @@ namespace TicketImporter
             TfsTeamProjectCollection impersonated_User = null;
             try
             {
-                LoggerUtil.WriteInLog("canImpersonate-->"+ canImpersonate);
                 if (canImpersonate)
                 {
                     if (userToImpersonate.IsSameUser(tfsProject.Tfs.AuthorizedIdentity.DisplayName) == false)
@@ -354,18 +352,13 @@ namespace TicketImporter
                 var ims = tfs.GetService<IIdentityManagementService>();
                 foreach (var user in tfsUsers)
                 {
-                    LoggerUtil.WriteInLog("IdentitySearchFactor.AccountName-->" + IdentitySearchFactor.AccountName);
-                    LoggerUtil.WriteInLog("user.DisplayName-->" + user.DisplayName);
                     var toImpersonate = ims.ReadIdentity(IdentitySearchFactor.AccountName, user.DisplayName, MembershipQuery.None, ReadIdentityOptions.None);
                     if (toImpersonate != null)
                     {
-                        LoggerUtil.WriteInLog("toImpersonate not null");
                         if (string.CompareOrdinal(tfs.AuthorizedIdentity.DisplayName, toImpersonate.DisplayName) != 0)
                         {
-                            LoggerUtil.WriteInLog("CompareOrdinal passed");
                             using (var tfs_impersonated = new TfsTeamProjectCollection(tfs.Uri, toImpersonate.Descriptor))
                             {
-                                LoggerUtil.WriteInLog("tfs_impersonated getting");
                                 // Will raise an exception if impersonation failed.
                                 var authorised = tfs_impersonated.AuthorizedIdentity.DisplayName;
                                 ableToImpersonate = true;
@@ -381,7 +374,6 @@ namespace TicketImporter
                 LoggerUtil.WriteInLog("ableToImpersonate-->+Exception");
                 ableToImpersonate = false;
             }
-            LoggerUtil.WriteInLog("ableToImpersonate-->" + ableToImpersonate);
             return ableToImpersonate;
         }
 
